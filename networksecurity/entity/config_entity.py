@@ -26,5 +26,5 @@ class DataIngestionConfig():
             self.data_ingestion_dir,training_pipeline.DATA_INGESTION_INGESTED_DIR,training_pipeline.TEST_FILE_NAME
         )
         self.train_test_split_ratio = training_pipeline.DATA_INGESTION_TRAIN_TEST_SPLIT_RATIO
-        self.collection_namae:str = training_pipeline.DATA_INGESTION_COLLECTION_NAME
+        self.collection_name:str = training_pipeline.DATA_INGESTION_COLLECTION_NAME
         self.database_name:str = training_pipeline.DATA_INGESTION_DATABASE_NAME
