@@ -23,6 +23,9 @@ from sklearn.ensemble import (
     RandomForestClassifier,
 )
 
+import dagshub
+dagshub.init(repo_owner='23cseaiml042', repo_name='NetworkSecurity', mlflow=True)
+
 class ModelTrainer:
     def __init__(self,model_trainer_config:ModelTrainerConfig,data_transformation_artifact:DataTransformationArtifact):
         try:
@@ -31,16 +34,16 @@ class ModelTrainer:
         except Exception as e:
             raise NetworkSecurityException(e,sys)
         
-        def track_mlflow(self,best_model,classificationmetric):
-            with mlflow.start_run():
-                f1_Score = classificationmetric.f1_score
-                precision_score = classificationmetric.precision_score
-                recall_score = classificationmetric.recall_score
+    def track_mlflow(self,best_model,classificationmetric):
+        with mlflow.start_run():
+            f1_Score = classificationmetric.f1_score
+            precision_score = classificationmetric.precision_score
+            recall_score = classificationmetric.recall_score
 
-                mlflow.log_metric("f1_score",f1_Score)
-                mlflow.log_metric("precision",precision_score)
-                mlflow.log_metric("recall_score",recall_score)
-                mlflow.sklearn.log_model(best_model,"model")
+            mlflow.log_metric("f1_score",f1_Score)
+            mlflow.log_metric("precision",precision_score)
+            mlflow.log_metric("recall_score",recall_score)
+            mlflow.sklearn.log_model(best_model,"model")
 
     
     def train_model(self,X_train,y_train,x_test,y_test):
@@ -108,6 +111,8 @@ class ModelTrainer:
 
         Network_Model = NetworkModel(preprocessor=preprocessor,model=best_model)
         save_object(self.model_trainer_config.trained_model_file_path,obj=NetworkModel)
+
+        save_object("final_model/model.pkl",best_model)
 
         #Model Trainer Artifacct
         model_trainer_artifact = ModelTrainerArtifact(trained_model_file_path=self.model_trainer_config.trained_model_file_path,
